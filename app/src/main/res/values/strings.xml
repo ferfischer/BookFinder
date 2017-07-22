@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BookFinder</string>
+    <string name="search">Search</string>
+    <string name="no_connection">No Internet Connection.</string>
+    <string name="do_the_search">Do the search using the search box above.</string>
+    <string name="nothing_found">Nenhum livro encontrado.</string>
+</resources>
