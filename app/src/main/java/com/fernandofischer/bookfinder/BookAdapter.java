@@ -38,8 +38,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
         final Book currentBook = getItem(position);
 
-        new DownloadImageTask((ImageView) listItemView.findViewById(R.id.thumbnail))
-                .execute(currentBook.getThumbnail());
+        ImageView imageView  = (ImageView) listItemView.findViewById(R.id.thumbnail);
+        imageView.setImageBitmap(currentBook.getBitmap());
 
         TextView title = (TextView) listItemView.findViewById(R.id.title);
         title.setText(currentBook.getTitle());
@@ -58,28 +58,4 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 }

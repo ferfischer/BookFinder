@@ -46,7 +46,6 @@ public class BookFinderActivity extends AppCompatActivity {
                                                 showLoadingIndicator();
                                                 TextView searchText = (TextView) findViewById(R.id.search_text);
                                                 searchBook(searchText.getText().toString());
-                                                hideLoadingIndicator();
                                             }
                                         }
         );
@@ -77,7 +76,7 @@ public class BookFinderActivity extends AppCompatActivity {
     }
 
     private void showLoadingIndicator() {
-        // Esconde o indicador de carregamento porque os dados foram carregados
+        // Exibe o indicador de carregamento porque os dados foram carregados
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.VISIBLE);
     }
@@ -116,7 +115,7 @@ public class BookFinderActivity extends AppCompatActivity {
             // Limpa o adapter de dados de books anteriores
             mAdapter.clear();
 
-            // Se há uma lista válida de {@link Earthquake}s, então adiciona-os ao data set do adapter.
+            // Se há uma lista válida de {@link Book}s, então adiciona-os ao data set do adapter.
             // Isto irá ativar a ListView para atualizar.
             if (books != null && !books.isEmpty()) {
                 mAdapter.addAll(books);

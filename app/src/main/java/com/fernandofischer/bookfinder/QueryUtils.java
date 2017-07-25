@@ -1,5 +1,7 @@
 package com.fernandofischer.bookfinder;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -83,7 +85,9 @@ public class QueryUtils {
 
                 String thumbnail = jObjVolumeInfo.getJSONObject("imageLinks").optString("smallThumbnail");
 
-                Book book = new Book(title, subtitle, authors, thumbnail);
+                Bitmap bitmap = getBitmapFromURL(thumbnail);
+
+                Book book = new Book(title, subtitle, authors, thumbnail, bitmap);
                 books.add (book);
             }
 
@@ -169,4 +173,18 @@ public class QueryUtils {
         return output.toString();
     }
 
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
+    }
 }
