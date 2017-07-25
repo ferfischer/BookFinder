@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookFinderActivity extends AppCompatActivity {
+public class BookFinderActivity extends AppCompatActivity implements AsyncTaskDelegate {
 
     BookAdapter mAdapter;
     TextView mEmptyStateTextView;
@@ -55,7 +55,7 @@ public class BookFinderActivity extends AppCompatActivity {
     private void searchBook(String searchQuery) {
         ListView bookListView = (ListView) findViewById(R.id.list);
 
-        BookFinderAsyncTask task = new BookFinderAsyncTask();
+        BookFinderAsyncTask task = new BookFinderAsyncTask(getApplicationContext(), this);
         try {
             task.execute("https://www.googleapis.com/books/v1/volumes?maxResults=10&q=" + URLEncoder.encode(searchQuery, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -87,41 +87,20 @@ public class BookFinderActivity extends AppCompatActivity {
         loadingIndicator.setVisibility(View.GONE);
     }
 
+    @Override
+    public void processFinish(Object output) {
+        // Seta texto do estado vazio para mostrar "Nenhum livro encontrado."
+        mEmptyStateTextView.setText(R.string.nothing_found);
 
-    private class BookFinderAsyncTask extends AsyncTask<String, Void, List<Book>> {
+        // Limpa o adapter de dados de books anteriores
+        mAdapter.clear();
 
-        @Override
-        protected List<Book> doInBackground(String... urls) {
-
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-            }
-
-            List<Book> books = QueryUtils.fetchBooksData(urls[0]);
-
-            return books;
+        // Se há uma lista válida de {@link Book}s, então adiciona-os ao data set do adapter.
+        // Isto irá ativar a ListView para atualizar.
+        if (output != null) {
+            mAdapter.addAll((List<Book>)output);
         }
 
-        @Override
-        protected void onPreExecute() {
-            showLoadingIndicator();
-        }
-
-        @Override
-        protected void onPostExecute(List<Book> books) {
-            // Seta texto do estado vazio para mostrar "Nenhum livro encontrado."
-            mEmptyStateTextView.setText(R.string.nothing_found);
-
-            // Limpa o adapter de dados de books anteriores
-            mAdapter.clear();
-
-            // Se há uma lista válida de {@link Book}s, então adiciona-os ao data set do adapter.
-            // Isto irá ativar a ListView para atualizar.
-            if (books != null && !books.isEmpty()) {
-                mAdapter.addAll(books);
-            }
-
-            hideLoadingIndicator();
-        }
+        hideLoadingIndicator();
     }
 }

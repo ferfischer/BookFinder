@@ -83,9 +83,18 @@ public class QueryUtils {
                     }
                 }
 
-                String thumbnail = jObjVolumeInfo.getJSONObject("imageLinks").optString("smallThumbnail");
+                JSONObject imageLinks = jObjVolumeInfo.optJSONObject("imageLinks");
+                String thumbnail = null;
 
-                Bitmap bitmap = getBitmapFromURL(thumbnail);
+                if (imageLinks != null) {
+                    thumbnail = imageLinks.optString("smallThumbnail");
+                }
+
+                Bitmap bitmap = null;
+
+                if (thumbnail != null && !thumbnail.isEmpty()) {
+                    bitmap = getBitmapFromURL(thumbnail);
+                }
 
                 Book book = new Book(title, subtitle, authors, thumbnail, bitmap);
                 books.add (book);

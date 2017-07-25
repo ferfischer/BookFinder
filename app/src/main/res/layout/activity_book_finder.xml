@@ -17,7 +17,8 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:maxLength="60" />
+            android:maxLength="60"
+            android:maxLines="1" />
 
         <Button
             android:id="@+id/search_button"
