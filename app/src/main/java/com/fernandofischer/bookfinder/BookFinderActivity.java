@@ -57,7 +57,7 @@ public class BookFinderActivity extends AppCompatActivity implements AsyncTaskDe
 
         BookFinderAsyncTask task = new BookFinderAsyncTask(getApplicationContext(), this);
         try {
-            task.execute("https://www.googleapis.com/books/v1/volumes?maxResults=10&q=" + URLEncoder.encode(searchQuery, "UTF-8"));
+            task.execute("https://www.googleapis.com/books/v1/volumes?maxResults=40&q=" + URLEncoder.encode(searchQuery, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
